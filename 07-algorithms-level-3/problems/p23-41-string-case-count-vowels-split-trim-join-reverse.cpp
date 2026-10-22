@@ -186,7 +186,7 @@ void PrintLetters(string Line, enWhatToCount WhatToPrint)
     }
 }
 
-// ===================== P35: Print Each Word in String =====================
+// ===================== P35 - P37: Split String / Words =====================
 
 vector<string> SplitString(string Line, string Delim = " ")
 {
@@ -219,6 +219,87 @@ void PrintEachWordInString(string Line)
     {
         cout << Word << endl;
     }
+}
+
+
+short CountStringWords(string Line)
+{
+    return SplitString(Line).size();
+}
+
+// ===================== P38: Trim Left / Right / All =====================
+
+string TrimLeft(string Line)
+{
+    while (Line[0] == ' ')
+    {
+        Line.erase(0, 1);
+    }
+    return Line;
+}
+
+
+string TrimRight(string Line)
+{
+    while (Line.length() > 0 && Line[Line.length() - 1] == ' ')
+    {
+        Line.pop_back();
+    }
+    return Line;
+}
+
+
+string Trim(string Line)
+{
+    return TrimLeft(TrimRight(Line));
+}
+
+// ===================== P39 - P40: Join String (Vector / Array) =====================
+
+string JoinString(vector<string> vWords, string Delim = " ")
+{
+    string Result;
+
+    for (const string& Word : vWords)
+    {
+        if (Result != "")
+            Result += Delim;
+
+        Result += Word;
+    }
+    return Result;
+}
+
+
+string JoinString(string arrWords[], int Length, string Delim = " ")
+{
+    string Result;
+
+    for (short i = 0; i < Length; i++)
+    {
+        if (Result != "")
+            Result += Delim;
+
+        Result += arrWords[i];
+    }
+    return Result;
+}
+
+// ===================== P41: Reverse Words of String =====================
+
+string ReverseWordsOfString(string Line, string Delim = " ")
+{
+    vector<string> vWords = SplitString(Line);
+    string ReversedString;
+
+    for (short i = vWords.size() - 1; i >= 0; i--)
+    {
+        if (ReversedString != "")
+            ReversedString += Delim;
+
+        ReversedString += vWords[i];
+    }
+    return ReversedString;
 }
 
 // ===================== Main =====================
@@ -325,6 +406,46 @@ int main()
     cout << "\n---------- P35: Print Each Word in String ----------\n";
     string S7 = ReadString("Please enter a string : ");
     PrintEachWordInString(S7);
+
+
+    //P36
+    cout << "\n---------- P36: Count Words in String ----------\n";
+    cout << "\nThe number of words in your string is : " << CountStringWords(S7) << endl;
+
+
+    //P37
+    cout << "\n---------- P37: Split String into Vector ----------\n";
+    cout << "\nTokens = " << CountStringWords(S7) << endl;
+    PrintEachWordInString(S7);
+
+
+    //P38
+    cout << "\n---------- P38: Trim Left / Right / All ----------\n";
+    string S8 = "     Mohammed Abu-Hadhoud     ";
+    cout << "\nString     = " << S8;
+    cout << "\n\nTrim Left  = " << TrimLeft(S8);
+    cout << "\nTrim Right = " << TrimRight(S8);
+    cout << "\nTrim       = " << Trim(S8) << endl;
+
+
+    //P39
+    cout << "\n---------- P39: Join Vector of Strings ----------\n";
+    vector<string> vWords = { "Change", "what you can't", "accept", "Accept", "what you can't", "change ..." };
+    cout << "\nVector after join : " << JoinString(vWords, " ") << endl;
+
+
+    //P40
+    cout << "\n---------- P40: Join Array of Strings ----------\n";
+    string arrWords[6] = { "Change", "what you can't", "accept", "Accept", "what you can't", "change ..." };
+    short Length = 6;
+    cout << "\nArray after join : " << JoinString(arrWords, Length, " ") << endl;
+
+
+    //P41
+    cout << "\n---------- P41: Reverse Words of String ----------\n";
+    string S9 = "Change what you can't accept Accept what you can't change ...";
+    cout << "\nString          : " << S9;
+    cout << "\nReversed Words  : " << ReverseWordsOfString(S9) << endl;
 
     return 0;
 }
