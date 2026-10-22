@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <cctype>
+#include <vector>
 
 using namespace std;
 
@@ -117,7 +118,7 @@ string InvertAllLine(string Line)
     return Line;
 }
 
-// ===================== P29 - P31: Count Letters =====================
+// ===================== P29 - P33: Letter Types (Count / Check) =====================
 
 enum enWhatToCount
 {
@@ -125,8 +126,16 @@ enum enWhatToCount
     CapitalLetters = 2,
     AllLetters = 3,
     SpecificLetterMatchCase = 4,
-    SpecificLetterNotMatchCase = 5
+    SpecificLetterNotMatchCase = 5,
+    Vowel = 6
 };
+
+
+bool IsLetterVowel(char Letter)
+{
+    Letter = LowercaseLetter(Letter);
+    return (Letter == 'a' || Letter == 'e' || Letter == 'i' || Letter == 'o' || Letter == 'u');
+}
 
 
 bool IsLetterOfType(char Letter, enWhatToCount WhatToCount, char SearchLetter = ' ')
@@ -145,6 +154,9 @@ bool IsLetterOfType(char Letter, enWhatToCount WhatToCount, char SearchLetter = 
     case enWhatToCount::SpecificLetterNotMatchCase:
         return (Letter == SearchLetter) || (Letter == InvertChar(SearchLetter));
 
+    case enWhatToCount::Vowel:
+        return IsLetterVowel(Letter);
+
     default:
         return isalpha(Letter); // isalpha دالة وظيفتها تتأكد اذا "حرف" مو "رمز" وهي بوليانية
     }
@@ -161,6 +173,52 @@ int CountLetters(string Line, enWhatToCount WhatToCount = enWhatToCount::AllLett
             Counter++;
     }
     return Counter;
+}
+
+// ===================== P34: Print Letters of Type =====================
+
+void PrintLetters(string Line, enWhatToCount WhatToPrint)
+{
+    for (short i = 0; i < Line.length(); i++)
+    {
+        if (IsLetterOfType(Line[i], WhatToPrint))
+            cout << Line[i] << "\t";
+    }
+}
+
+// ===================== P35: Print Each Word in String =====================
+
+vector<string> SplitString(string Line, string Delim = " ")
+{
+    vector<string> vWords;
+    string Word;
+    size_t Pos = 0;
+
+    while ((Pos = Line.find(Delim)) != string::npos)
+    {
+        Word = Line.substr(0, Pos);
+
+        if (Word != "")
+            vWords.push_back(Word);
+
+        Line.erase(0, Pos + Delim.length());
+    }
+
+    if (Line != "")
+        vWords.push_back(Line);
+
+    return vWords;
+}
+
+
+void PrintEachWordInString(string Line)
+{
+    cout << "\nYour string words are:\n\n";
+
+    for (const string& Word : SplitString(Line))
+    {
+        cout << Word << endl;
+    }
 }
 
 // ===================== Main =====================
@@ -239,6 +297,34 @@ int main()
         cout << "\nLetter '" << SearchChar2 << "' Count = "
             << CountLetters(S5, enWhatToCount::SpecificLetterNotMatchCase, SearchChar2) << endl;
     }
+
+
+    //P32
+    cout << "\n---------- P32: Check Vowel ----------\n";
+    char CharToCheck = ReadChar("Please enter a character : ");
+    if (IsLetterOfType(CharToCheck, enWhatToCount::Vowel))
+        cout << "\nYES: Letter '" << CharToCheck << "' is vowel\n";
+    else
+        cout << "\nNO: Letter '" << CharToCheck << "' is NOT vowel\n";
+
+
+    //P33
+    cout << "\n---------- P33: Count Vowels ----------\n";
+    string S6 = ReadString("Please enter a string : ");
+    cout << "\nNumber of vowels is : " << CountLetters(S6, enWhatToCount::Vowel) << endl;
+
+
+    //P34
+    cout << "\n---------- P34: Print Vowels ----------\n";
+    cout << "\nVowels in string are : ";
+    PrintLetters(S6, enWhatToCount::Vowel);
+    cout << endl;
+
+
+    //P35
+    cout << "\n---------- P35: Print Each Word in String ----------\n";
+    string S7 = ReadString("Please enter a string : ");
+    PrintEachWordInString(S7);
 
     return 0;
 }
