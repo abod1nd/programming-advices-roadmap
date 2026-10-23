@@ -28,6 +28,17 @@ char ReadChar(string Message)
     return Letter;
 }
 
+
+bool AskYesNoQ(string Message)
+{
+    char Answer;
+
+    cout << Message;
+    cin >> Answer;
+
+    return (Answer == 'Y' || Answer == 'y');
+}
+
 // ===================== Char Case Helpers =====================
 
 char UppercaseLetter(char Letter)
@@ -302,6 +313,57 @@ string ReverseWordsOfString(string Line, string Delim = " ")
     return ReversedString;
 }
 
+// ===================== P42: Replace Words (Built-in replace) =====================
+
+string ReplaceWordsInString(string Line, string Replaced, string TheReplace)
+{
+    size_t Pos;
+
+    while ((Pos = Line.find(Replaced)) != string::npos)
+    {
+        Line.replace(Pos, Replaced.length(), TheReplace);
+    }
+    return Line;
+}
+
+// ===================== P43: Replace Words Using Split (Match Case or Not) =====================
+
+string ReplaceWordsUsingSplit(string Line, string Replaced, string TheReplace, bool isMatchCase)
+{
+    vector<string> vWords = SplitString(Line);
+
+    for (short i = 0; i < vWords.size(); i++)
+    {
+        if (isMatchCase)
+        {
+            if (vWords[i] == Replaced)
+                vWords[i] = TheReplace;
+        }
+        else
+        {
+            if (LowerAllLine(vWords[i]) == LowerAllLine(Replaced))
+                vWords[i] = TheReplace;
+        }
+    }
+    return JoinString(vWords);
+}
+
+// ===================== P44: Remove Punctuations =====================
+
+string RemovePunctuations(string Line)
+{
+    string Result;
+
+    for (short i = 0; i < Line.length(); i++)
+    {
+        if (!ispunct(Line[i]))
+        {
+            Result += Line[i];
+        }
+    }
+    return Result;
+}
+
 // ===================== Main =====================
 
 int main()
@@ -446,6 +508,37 @@ int main()
     string S9 = "Change what you can't accept Accept what you can't change ...";
     cout << "\nString          : " << S9;
     cout << "\nReversed Words  : " << ReverseWordsOfString(S9) << endl;
+
+
+    //P42
+    cout << "\n---------- P42: Replace Words in String ----------\n";
+    string S10 = "Welcome to Jordan , Jordan is a nice country";
+    cout << "\nOriginal String:\n" << S10 << endl;
+    cout << "\nString After Replace:\n" << ReplaceWordsInString(S10, "Jordan", "USA") << endl;
+
+
+    //P43
+    cout << "\n---------- P43: Replace Words Using Custom Function ----------\n";
+    string S11 = "Welcome to Jordan , Jordan is a nice country";
+    bool isMatch = AskYesNoQ("Do you want match case ? Y/N ? ");
+    cout << "\nOriginal String:\n" << S11 << endl;
+    if (isMatch)
+    {
+        cout << "\nReplace with match case:\n"
+            << ReplaceWordsUsingSplit(S11, "jordan", "USA", isMatch) << endl;
+    }
+    else
+    {
+        cout << "\nReplace with dont match case:\n"
+            << ReplaceWordsUsingSplit(S11, "jordan", "USA", isMatch) << endl;
+    }
+
+
+    //P44
+    cout << "\n---------- P44: Remove Punctuations from String ----------\n";
+    string S12 = "Welcome to Jordan, Jordan is a nice country; it's amazing!";
+    cout << "\nOriginal String:\n" << S12 << endl;
+    cout << "\nPunctuations Removed:\n" << RemovePunctuations(S12) << endl;
 
     return 0;
 }
